@@ -107,11 +107,10 @@ Use the `BLANK_README.md` to get started.
 * [![Python][Python]][Python-url]
 * [![Django][Django]][Django-url]
 * [![DjangoREST][DjangoREST]][DjangoREST-url]
-* [![Swagger][Swagger.io]][Swagger-url]
+* [![Swagger][Swagger]][Swagger-url]
 * [![JWT][JWT]][JWT-url]
 * [![Postgres][Postgres]][Postgres-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
