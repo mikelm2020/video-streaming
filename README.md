@@ -121,26 +121,26 @@ In this project the objetives are:
 
 ### Prerequisites
 
-* This project use a postgreSQL local database.
-* Crate a JSON file with eviroment variables
+This project use a postgreSQL local database.
+
 
 
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
 1. Clone the repository
    ```sh
    git clone https://github.com/mikelm2020/video-streaming.git
    ```
-2. Create the virtual enviroment through of local requirements file in the requirements folder
+2. Create the python virtual enviroment
+3. Prepare the virtual enviroment through of local requirements file in the requirements folder
    ```sh
    pip install -r requirements/local.txt
    ```
-3. Create a JSON file with enviroment variables in the video_streaming folder
+4. Create a JSON file with enviroment variables in the video_streaming folder
 
-4. The eviroment variables are used in the settings
+5. The enviroment variables are used in the settings
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -201,7 +201,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Miguel Angel López Monroy - [@your_twitter](https://twitter.com/mklm7209282010) - mklm720928@gmail.com
+Miguel Angel López Monroy - [@mklm7209282010](https://twitter.com/mklm7209282010) - mklm720928@gmail.com
 
 Project Link: [https://github.com/mikelm2020/video-streaming](https://github.com/mikelm2020/video-streaming)
 
