@@ -104,12 +104,12 @@ Use the `BLANK_README.md` to get started.
 
 
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
+* [![Python][Python]][Python-url]
+* [![Django][Django]][Django-url]
+* [![DjangoREST][DjangoREST]][DjangoREST-url]
+* [![Swagger][Swagger.io]][Swagger-url]
+* [![JWT][JWT]][JWT-url]
+* [![Postgres][Postgres]][Postgres-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
 
@@ -260,4 +260,8 @@ Use this space to list resources you find helpful and would like to give credit 
 [DjangoREST-url]: https://www.django-rest-framework.org/
 [Swagger]: https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white
 [Swagger-url]: https://swagger.io/
+[JWT]: https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white
+[JWT-url]: https://jwt.io/
+[Postgres]: https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white
+[Postgres-url]: https://www.postgresql.org/
 
