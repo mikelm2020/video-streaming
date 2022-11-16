@@ -39,14 +39,14 @@
   <p align="center">
     A manager for playlist's streaming videos in local mode!
     <br />
-    <a href="https://github.com/othneildrew/video-streaming"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/mikelm2020/video-streaming"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/othneildrew/video-streaming">View Demo</a>
+    <a href="https://github.com/mikelm2020/video-streaming">View Demo</a>
     ·
-    <a href="https://github.com/othneildrew/video-streaming/issues">Report Bug</a>
+    <a href="https://github.com/mikelm2020/video-streaming/issues">Report Bug</a>
     ·
-    <a href="https://github.com/othneildrew/video-streaming/issues">Request Feature</a>
+    <a href="https://github.com/mikelm2020/video-streaming/issues">Request Feature</a>
   </p>
 </div>
 
