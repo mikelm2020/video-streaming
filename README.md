@@ -118,34 +118,29 @@ In this project the objetives are:
 <!-- GETTING STARTED -->
 ## Getting Started
 
-* Clone the repository
-* Create the virtual enviroment through of local requirements file in the requirements folder
 
 ### Prerequisites
 
-This project use a postgreSQL local database.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+* This project use a postgreSQL local database.
+* Crate a JSON file with eviroment variables
+
+
 
 ### Installation
 
 _Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repository
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/mikelm2020/video-streaming.git
    ```
-3. Install NPM packages
+2. Create the virtual enviroment through of local requirements file in the requirements folder
    ```sh
-   npm install
+   pip install -r requirements/local.txt
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+3. Create a JSON file with enviroment variables in the video_streaming folder
+
+4. The eviroment variables are used in the settings
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -154,7 +149,7 @@ _Below is an example of how you can instruct your audience on installing and set
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Because this project is an API can you use Postman, or any client
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
@@ -165,13 +160,10 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+- [x] Add CRUD operations
+- [ ] Terminate swagger documentation
+- [ ] Add versioning control
+
 
 See the [open issues](https://github.com/mikelm2020/video-streaming/issues) for a full list of proposed features (and known issues).
 
@@ -209,7 +201,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Miguel Angel López - [@your_twitter](https://twitter.com/mklm7209282010) - mklm720928@gmail.com
+Miguel Angel López Monroy - [@your_twitter](https://twitter.com/mklm7209282010) - mklm720928@gmail.com
 
 Project Link: [https://github.com/mikelm2020/video-streaming](https://github.com/mikelm2020/video-streaming)
 
@@ -220,16 +212,17 @@ Project Link: [https://github.com/mikelm2020/video-streaming](https://github.com
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+My favorite resources used:
 
 * [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+* [Django Documentation](https://docs.djangoproject.com/en/4.1/)
+* [Django Rest Framework Documentation](https://www.django-rest-framework.org/)
+* [Django Class Based View Inspector](http://ccbv.co.uk/)
+* [Classy Django Rest Framework](https://www.cdrf.co/)
+* [Platzi Platform](https://platzi.com/)
+* [Udemy Platform](https://www.udemy.com/)
+* [Real Python Tutorials](https://realpython.com/)
+* [Blog Developer.pe](http://www.developerpe.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
