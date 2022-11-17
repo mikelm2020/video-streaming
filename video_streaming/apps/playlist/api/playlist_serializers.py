@@ -11,10 +11,33 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class VideoSerializer(serializers.ModelSerializer):
-    viewed = serializers.BooleanField()
+    # viewed = serializers.BooleanField()
+
     class Meta:
         model = Video
-        fields = ("name", "video_type", "duration", "chapters", "number_season", "viewed")
+        fields = (
+            "id",
+            "name",
+            "video_type",
+            "duration",
+            "chapters",
+            "number_season",
+            "viewed",
+        )
+
+
+# class ViewedVideoSerializer(serializers.ModelSerializer):
+#     viewed = serializers.BooleanField()
+
+#     class Meta:
+#         model = Video
+#         fields = ("id",)
+
+#     def to_representation(self, instance):
+#         return {
+#             "pk": instance["pk"],
+#             "viewed": instance["viewed"]
+#         }
 
 
 class PlaylistSerializer(serializers.ModelSerializer):
@@ -31,3 +54,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
 class PlaylistVideoSerializer(serializers.Serializer):
     user = UserSerializer()
     video = VideoSerializer(many=True, read_only=True)
+    
+   
+
+

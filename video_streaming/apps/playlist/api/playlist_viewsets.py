@@ -76,6 +76,27 @@ class PlaylistViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+    def partial_update(self, request, pk=None):
+        """Mark how viewed the movie or serie in the playlist"""
+
+        playlist = self.get_object(pk)
+        video_serializer = SeasonSerializer(video, data=request.data, partial=True)
+        if video_serializer.is_valid():
+            video_serializer.save()
+            return Response(
+                {
+                    "message": "Video actualizado correctamente con los datos de la temporada"
+                },
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+            {
+                "message": "Hay errores en la actualización",
+                "error": video_serializer.errors,
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     def destroy(self, request, pk=None):
         playlist_destroy = self.serializer_class.Meta.model.objects.filter(
             id=pk
@@ -89,3 +110,9 @@ class PlaylistViewSet(viewsets.GenericViewSet):
             {"message": "No existe la playlist que desea eliminar"},
             status=status.HTTP_404_NOT_FOUND,
         )
+
+    @action(methods=["get"], detail=True)
+    def search_playlist(self, request):
+        video_to_find = request.query_params.get("video_to_find", "")
+        video = Playlist.objects.filter(video__name="hola")
+

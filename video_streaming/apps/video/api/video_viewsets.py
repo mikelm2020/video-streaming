@@ -86,6 +86,7 @@ class VideoViewSet(viewsets.GenericViewSet):
 
     def partial_update(self, request, pk=None):
         """Update with data of the serie's season"""
+        
         video = self.get_object(pk)
         video_serializer = SeasonSerializer(video, data=request.data, partial=True)
         if video_serializer.is_valid():
