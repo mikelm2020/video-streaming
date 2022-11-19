@@ -1,7 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from django.shortcuts import get_object_or_404
 
@@ -13,6 +12,7 @@ from apps.video.api.video_serializers import (
     CountrySerializer,
     ProviderSerializer,
     SeasonSerializer,
+    SeasonRegisterSerializer,
 )
 from apps.core.models import *
 
@@ -38,7 +38,22 @@ class VideoViewSet(viewsets.GenericViewSet):
         if serializer.is_valid():
             serializer.save()
             if serializer.data["video_type"] == "S":
-                pass
+                data_season = {
+                    "video": serializer.data["id"],
+                    "chapters": 6,
+                    "number_season": 1,
+                }
+            else:
+                data_season = {
+                    "video": serializer.data["id"],
+                    "chapters": 0,
+                    "number_season": 0,
+                }
+            
+            data_season = SeasonRegisterSerializer(data=data_season)
+
+            if data_season.is_valid():
+                data_season.save()
 
             return Response(
                 {"message": "Video registrado correctamente"},
@@ -86,7 +101,7 @@ class VideoViewSet(viewsets.GenericViewSet):
 
     def partial_update(self, request, pk=None):
         """Update with data of the serie's season"""
-        
+
         video = self.get_object(pk)
         video_serializer = SeasonSerializer(video, data=request.data, partial=True)
         if video_serializer.is_valid():

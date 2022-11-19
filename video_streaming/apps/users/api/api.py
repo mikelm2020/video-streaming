@@ -26,6 +26,22 @@ class UserViewSet(viewsets.GenericViewSet):
     def get_object(self, pk):
         return get_object_or_404(self.serializer_class.Meta.model, pk=pk)
 
+    @action(methods=["post"], detail=True)
+    def set_password(self, request, pk=None):
+        user = self.get_object(pk)
+        password_serializer = PasswordSerializer(data=request.data)
+        if password_serializer.is_valid():
+            user.set_password(password_serializer.validated_data["password"])
+            user.save()
+            return Response(
+                {"message": "La contraseña se actualizó correctamente!"},
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+            {"message": "Ocurrieron errores!", "error": password_serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     def list(self, request):
         users = self.get_queryset()
         users_serializer = self.list_serializer_class(users, many=True)
@@ -80,20 +96,4 @@ class UserViewSet(viewsets.GenericViewSet):
             )
         return Response(
             {"message": "El usuario no existe!"}, status=status.HTTP_404_NOT_FOUND
-        )
-
-    @action(methods=["post"], detail=True)
-    def set_password(self, request, pk=None):
-        user = self.get_object(pk)
-        password_serializer = PasswordSerializer(data=request.data)
-        if password_serializer.is_valid():
-            user.set_password(password_serializer.validated_data["password"])
-            user.save()
-            return Response(
-                {"message": "La contraseña se actualizó correctamente!"},
-                status=status.HTTP_200_OK,
-            )
-        return Response(
-            {"message": "Ocurrieron errores!", "error": password_serializer.errors},
-            status=status.HTTP_400_BAD_REQUEST,
         )

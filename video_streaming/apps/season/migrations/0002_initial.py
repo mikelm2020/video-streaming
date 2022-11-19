@@ -10,13 +10,21 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("core", "0001_initial"),
+        ("video", "0001_initial"),
+        ("season", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name="historicalprovider",
+            model_name="season",
+            name="video",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="video.video"
+            ),
+        ),
+        migrations.AddField(
+            model_name="historicalseason",
             name="history_user",
             field=models.ForeignKey(
                 null=True,
@@ -26,33 +34,15 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AddField(
-            model_name="historicalfilmgenre",
-            name="history_user",
+            model_name="historicalseason",
+            name="video",
             field=models.ForeignKey(
+                blank=True,
+                db_constraint=False,
                 null=True,
-                on_delete=django.db.models.deletion.SET_NULL,
+                on_delete=django.db.models.deletion.DO_NOTHING,
                 related_name="+",
-                to=settings.AUTH_USER_MODEL,
-            ),
-        ),
-        migrations.AddField(
-            model_name="historicalcountry",
-            name="history_user",
-            field=models.ForeignKey(
-                null=True,
-                on_delete=django.db.models.deletion.SET_NULL,
-                related_name="+",
-                to=settings.AUTH_USER_MODEL,
-            ),
-        ),
-        migrations.AddField(
-            model_name="historicalclassification",
-            name="history_user",
-            field=models.ForeignKey(
-                null=True,
-                on_delete=django.db.models.deletion.SET_NULL,
-                related_name="+",
-                to=settings.AUTH_USER_MODEL,
+                to="video.video",
             ),
         ),
     ]

@@ -26,10 +26,6 @@ class Video(BaseModel):
     country = models.ManyToManyField(Country, verbose_name="Pais")
     provider = models.ManyToManyField(Provider, verbose_name="Proveedor")
     duration = models.IntegerField(verbose_name="Duración", blank=True)
-    chapters = models.SmallIntegerField(verbose_name="Capitulos", default=0)
-    number_season = models.SmallIntegerField(verbose_name="Temporada", default=0)
-    viewed = models.BooleanField(verbose_name="Vista", default=False)
-
 
     class Meta:
 
@@ -38,5 +34,3 @@ class Video(BaseModel):
 
     def __str__(self):
         return self.name
-
-    

@@ -2,6 +2,7 @@ from rest_framework import serializers
 from apps.video.models import Video
 from apps.core.models import *
 from apps.core.api.core_serializers import *
+from apps.season.models import Season
 
 
 class VideoSerializer(serializers.ModelSerializer):
@@ -22,18 +23,18 @@ class VideoSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {"duration": "La duración de una pélicula no puede ser 0"}
                 )
-        elif data["video_type"] == "S":
-            if data["chapters"] == 0:
-                raise serializers.ValidationError(
-                    {
-                        "chapters": "Falta registrar el número de capitulos de la temporada"
-                    }
-                )
-            if data["number_season"] == 0:
-                raise serializers.ValidationError(
-                    {"number_season": "Falta registrar el número de temporada"}
-                )
         return data
+
+
+class SeasonRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Season
+        fields = ("video", "chapters", "number_season")
+
+    def save(self):
+
+        new_season = Season.objects.create(**self.validated_data)
+        return new_season
 
 
 class FilmGenreSerializer(serializers.ModelSerializer):

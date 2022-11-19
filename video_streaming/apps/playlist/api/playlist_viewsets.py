@@ -39,10 +39,11 @@ class PlaylistViewSet(viewsets.GenericViewSet):
         return data
 
     def create(self, request):
-
         data = self.format_data(data=request.data)
         serializer = self.serializer_class(data=data)
+
         if serializer.is_valid():
+
             serializer.save()
 
             return Response(
@@ -56,7 +57,7 @@ class PlaylistViewSet(viewsets.GenericViewSet):
 
     def retrieve(self, request, pk=None):
         playlist = self.get_object(pk)
-        playlist_serializer = self.serializer_class(playlist)
+        playlist_serializer = self.list_serializer_class(playlist)
         return Response(playlist_serializer.data)
 
     def update(self, request, pk=None):
@@ -72,27 +73,6 @@ class PlaylistViewSet(viewsets.GenericViewSet):
             {
                 "message": "Hay errores en la actualización",
                 "error": playlist_serializer.errors,
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    def partial_update(self, request, pk=None):
-        """Mark how viewed the movie or serie in the playlist"""
-
-        playlist = self.get_object(pk)
-        video_serializer = SeasonSerializer(video, data=request.data, partial=True)
-        if video_serializer.is_valid():
-            video_serializer.save()
-            return Response(
-                {
-                    "message": "Video actualizado correctamente con los datos de la temporada"
-                },
-                status=status.HTTP_200_OK,
-            )
-        return Response(
-            {
-                "message": "Hay errores en la actualización",
-                "error": video_serializer.errors,
             },
             status=status.HTTP_400_BAD_REQUEST,
         )
@@ -115,4 +95,3 @@ class PlaylistViewSet(viewsets.GenericViewSet):
     def search_playlist(self, request):
         video_to_find = request.query_params.get("video_to_find", "")
         video = Playlist.objects.filter(video__name="hola")
-

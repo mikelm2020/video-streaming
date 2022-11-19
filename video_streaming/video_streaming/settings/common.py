@@ -56,6 +56,7 @@ LOCAL_APPS = [
     "apps.core",
     "apps.playlist",
     "apps.video",
+    "apps.season",
 ]
 
 THIRD_APPS = [
