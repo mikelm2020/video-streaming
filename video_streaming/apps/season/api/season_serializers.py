@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from apps.season.models import Season
-from apps.video.api.video_serializers import VideoSerializer
+from apps.video.models import Video
+from apps.video.api.video_serializers import VideoSerializer, VideoIdSerializer
 
 
 class SeasonSerializer(serializers.ModelSerializer):
@@ -36,3 +37,27 @@ class SeasonUpdateSerializer(serializers.ModelSerializer):
             "chapters",
             "number_season",
         )
+
+
+class SeasonCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Season
+        fields = ("video", "chapters", "number_season")
+
+    def validate(self, data):
+        from django.db.models import Max
+
+        if data["video"].video_type != "S":
+            raise serializers.ValidationError(
+                {"video": "El id del video no pertenece a una serie!"}
+            )
+        else:
+            actual_season = Season.objects.filter(
+                state=True, video=data["video"].id
+            ).aggregate(Max("number_season"))
+
+            if data["number_season"] - actual_season.get("number_season__max") != 1:
+                raise serializers.ValidationError(
+                    {"number_season": "Número de temporada inválido!"}
+                )
+        return data

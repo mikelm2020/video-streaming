@@ -15,3 +15,4 @@ class Season(BaseModel):
 
     def str(self):
         return f"{self.video.name} S-{self.number_season}"
+    

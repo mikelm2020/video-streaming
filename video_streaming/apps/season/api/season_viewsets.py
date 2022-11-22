@@ -8,6 +8,7 @@ from apps.season.models import Season
 from apps.season.api.season_serializers import (
     SeasonSerializer,
     SeasonUpdateSerializer,
+    SeasonCreateSerializer,
 )
 from apps.core.models import *
 
@@ -28,58 +29,23 @@ class SeasonViewSet(viewsets.GenericViewSet):
         season_serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(season_serializer.data, status=status.HTTP_200_OK)
 
-    # def create(self, request):
-    #     serializer = self.serializer_class(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         if serializer.data["season_type"] == "S":
-    #             data_season = {
-    #                 "season": serializer.data["id"],
-    #                 "chapters": 6,
-    #                 "number_season": 1,
-    #             }
-    #         else:
-    #             data_season = {
-    #                 "season": serializer.data["id"],
-    #                 "chapters": 0,
-    #                 "number_season": 0,
-    #             }
-
-    #         data_season = SeasonRegisterSerializer(data=data_season)
-
-    #         if data_season.is_valid():
-    #             data_season.save()
-
-    #         return Response(
-    #             {"message": "Temporada registrada correctamente"},
-    #             status=status.HTTP_201_CREATED,
-    #         )
-    #     return Response(
-    #         {"message": "Hay errores en el registro", "error": serializer.errors},
-    #         status=status.HTTP_400_BAD_REQUEST,
-    #     )
+    def create(self, request):
+        serializer = SeasonCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "Temporada registrada correctamente"},
+                status=status.HTTP_201_CREATED,
+            )
+        return Response(
+            {"message": "Hay errores en el registro", "error": serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     def retrieve(self, request, pk=None):
         season = self.get_object(pk)
         season_serializer = self.serializer_class(season)
         return Response(season_serializer.data)
-
-    def update(self, request, pk=None):
-        season = self.get_object(pk)
-        season_serializer = self.serializer_class(season, data=request.data)
-        if season_serializer.is_valid():
-            season_serializer.save()
-            return Response(
-                {"message": "Temporada actualizada correctamente"},
-                status=status.HTTP_200_OK,
-            )
-        return Response(
-            {
-                "message": "Hay errores en la actualización",
-                "error": season_serializer.errors,
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
 
     def destroy(self, request, pk=None):
         season_destroy = self.serializer_class.Meta.model.objects.filter(id=pk).update(
@@ -99,7 +65,9 @@ class SeasonViewSet(viewsets.GenericViewSet):
         """Update with data of the serie's season"""
 
         season = self.get_object(pk)
-        season_serializer = SeasonUpdateSerializer(season, data=request.data, partial=True)
+        season_serializer = SeasonUpdateSerializer(
+            season, data=request.data, partial=True
+        )
         if season_serializer.is_valid():
             season_serializer.save()
             return Response(

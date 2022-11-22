@@ -65,3 +65,9 @@ class SeasonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
         fields = ("chapters", "number_season")
+
+
+class VideoIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = ("id",)
