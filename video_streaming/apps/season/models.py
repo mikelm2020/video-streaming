@@ -7,7 +7,7 @@ class Season(BaseModel):
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
     chapters = models.SmallIntegerField(verbose_name="Capitulos", default=0)
     number_season = models.SmallIntegerField(verbose_name="Temporada", default=0)
-    viewed = models.BooleanField(verbose_name="Visto", default=False)
+    
 
     class Meta:
         verbose_name = "Temporada"

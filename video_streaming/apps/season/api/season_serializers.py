@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from apps.season.models import Season
-from apps.video.models import Video
-from apps.video.api.video_serializers import VideoSerializer, VideoIdSerializer
+from apps.video.api.video_serializers import VideoSerializer
 
 
 class SeasonSerializer(serializers.ModelSerializer):
@@ -14,7 +13,6 @@ class SeasonSerializer(serializers.ModelSerializer):
             "video",
             "chapters",
             "number_season",
-            "viewed",
         )
 
     def validate_chapters(self, value):
