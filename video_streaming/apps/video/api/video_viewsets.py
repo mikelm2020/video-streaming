@@ -1,54 +1,49 @@
-from rest_framework import viewsets, status, filters
-from rest_framework.response import Response
-from rest_framework.decorators import action
-
-from django.shortcuts import get_object_or_404
-
-from apps.video.models import Video
-from apps.video.api.video_serializers import (
-    VideoSerializer,
-    FilmGenreSerializer,
-    ClassificationSerializer,
-    CountrySerializer,
-    ProviderSerializer,
-    SeasonSerializer,
-    SeasonRegisterSerializer,
-)
 from apps.core.models import *
 from apps.video.api.filters import VideoFilterSet
+from apps.video.api.pagination import ExtendedPagination
+from apps.video.api.video_serializers import (
+    SeasonRegisterSerializer,
+    VideoSerializer,
+    VideoStateSerializer,
+)
+from apps.video.models import Video
+from django.db.models.query import QuerySet
 from django_filters import rest_framework
+from rest_framework import filters, status, viewsets
+from rest_framework.response import Response
 
 
-class VideoViewSet(viewsets.GenericViewSet):
+class VideoNewViewSet(viewsets.ModelViewSet):
     serializer_class = VideoSerializer
+    queryset = Video.objects.filter(state=True)
     filter_backends = [
         rest_framework.DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
     ]
-
     filterset_class = VideoFilterSet
-    
+    search_fields = ("film_genre__film_genre", "name")
+    ordering_fields = ("num_year",)
+    pagination_class = ExtendedPagination
 
-    def get_queryset(self, pk=None):
-        if pk is None:
-            self.filterset = VideoFilterSet(
-                self.request.GET, queryset=Video.objects.filter(state=True)
-            )
+    def get_queryset(self):
+        assert self.queryset is not None, (
+            "'%s' should either include a `queryset` attribute, "
+            "or override the `get_queryset()` method." % self.__class__.__name__
+        )
 
-        else:
-            self.filterset = VideoFilterSet(
-                self.request.GET, Video.objects.filter(id=pk, state=True).first()
-            )
-        return self.filterset.qs
-        
-    def get_object(self, pk):
-        return get_object_or_404(Video, pk=pk)
+        queryset = self.queryset
+        if isinstance(queryset, QuerySet):
+            # Ensure queryset is re-evaluated on each request.
+            queryset = queryset.all()
+        return queryset
 
+    def retrieve(self, request, *args, **kwargs):
+        video = self.get_object(*args)
+        video_serializer = self.serializer_class(video)
+        return Response(video_serializer.data)
 
-    def list(self, request):
-        video_serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response(video_serializer.data, status=status.HTTP_200_OK)
-
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -79,13 +74,8 @@ class VideoViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def retrieve(self, request, pk=None):
-        video = self.get_object(pk)
-        video_serializer = self.serializer_class(video)
-        return Response(video_serializer.data)
-
-    def update(self, request, pk=None):
-        video = self.get_object(pk)
+    def update(self, request, *args, **kwargs):
+        video = self.get_object(*args)
         video_serializer = self.serializer_class(video, data=request.data)
         if video_serializer.is_valid():
             video_serializer.save()
@@ -101,30 +91,19 @@ class VideoViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def destroy(self, request, pk=None):
-        video_destroy = self.serializer_class.Meta.model.objects.filter(id=pk).update(
-            state=False
-        )
-        if video_destroy == 1:
-            return Response(
-                {"message": "Video eliminado correctamente!"}, status=status.HTTP_200_OK
-            )
-        return Response(
-            {"message": "No existe el video que desea eliminar"},
-            status=status.HTTP_404_NOT_FOUND,
-        )
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def partial_update(self, request, pk=None):
-        """Update with data of the serie's season"""
-
-        video = self.get_object(pk)
-        video_serializer = SeasonSerializer(video, data=request.data, partial=True)
+    def partial_update(self, request, *args, **kwargs):
+        """Unsubscribe a video"""
+        video = self.get_object()
+        video_serializer = VideoStateSerializer(video, data=request.data, partial=True)
         if video_serializer.is_valid():
             video_serializer.save()
             return Response(
-                {
-                    "message": "Video actualizado correctamente con los datos de la temporada"
-                },
+                {"message": "Video dado de baja correctamente!"},
                 status=status.HTTP_200_OK,
             )
         return Response(
@@ -134,31 +113,3 @@ class VideoViewSet(viewsets.GenericViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST,
         )
-
-    @action(methods=["get"], detail=False)
-    def get_film_genre(self, request):
-
-        data = FilmGenre.objects.filter(state=True).order_by("id")
-        data = FilmGenreSerializer(data, many=True).data
-        return Response(data)
-
-    @action(methods=["get"], detail=False)
-    def get_classification(self, request):
-
-        data = Classification.objects.filter(state=True).order_by("id")
-        data = ClassificationSerializer(data, many=True).data
-        return Response(data)
-
-    @action(methods=["get"], detail=False)
-    def get_country(self, request):
-
-        data = Country.objects.filter(state=True).order_by("id")
-        data = CountrySerializer(data, many=True).data
-        return Response(data)
-
-    @action(methods=["get"], detail=False)
-    def get_provider(self, request):
-
-        data = Provider.objects.filter(state=True).order_by("id")
-        data = ProviderSerializer(data, many=True).data
-        return Response(data)
