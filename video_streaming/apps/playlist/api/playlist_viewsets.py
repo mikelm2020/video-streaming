@@ -11,7 +11,7 @@ from apps.playlist.api.playlist_serializers import (
     PlaylistVideoSerializer,
     PlaylistVideoUpdateSerializer,
 )
-from apps.playlist.models import Playlist, PlaylistVideo
+from apps.playlist.models import Playlist
 
 
 class PlaylistViewSet(viewsets.GenericViewSet):

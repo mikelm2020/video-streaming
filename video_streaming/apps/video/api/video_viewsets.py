@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
@@ -15,19 +15,34 @@ from apps.video.api.video_serializers import (
     SeasonRegisterSerializer,
 )
 from apps.core.models import *
+from apps.video.api.filters import VideoFilterSet
+from django_filters import rest_framework
 
 
 class VideoViewSet(viewsets.GenericViewSet):
     serializer_class = VideoSerializer
+    filter_backends = [
+        rest_framework.DjangoFilterBackend,
+    ]
+
+    filterset_class = VideoFilterSet
+    
 
     def get_queryset(self, pk=None):
         if pk is None:
-            return Video.objects.filter(state=True)
-        else:
-            return Video.objects.filter(id=pk, state=True).first()
+            self.filterset = VideoFilterSet(
+                self.request.GET, queryset=Video.objects.filter(state=True)
+            )
 
+        else:
+            self.filterset = VideoFilterSet(
+                self.request.GET, Video.objects.filter(id=pk, state=True).first()
+            )
+        return self.filterset.qs
+        
     def get_object(self, pk):
         return get_object_or_404(Video, pk=pk)
+
 
     def list(self, request):
         video_serializer = self.get_serializer(self.get_queryset(), many=True)
@@ -49,7 +64,7 @@ class VideoViewSet(viewsets.GenericViewSet):
                     "chapters": 0,
                     "number_season": 0,
                 }
-            
+
             data_season = SeasonRegisterSerializer(data=data_season)
 
             if data_season.is_valid():
