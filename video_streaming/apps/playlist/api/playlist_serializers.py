@@ -27,7 +27,6 @@ class PlaylistSerializer(serializers.ModelSerializer):
 class PlaylistListSerializer(serializers.Serializer):
     user = UserSerializer()
     video = SeasonSerializer(many=True)
-    
 
 
 class PlaylistVideoSerializer(serializers.ModelSerializer):
