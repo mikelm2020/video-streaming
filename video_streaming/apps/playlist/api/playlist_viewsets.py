@@ -1,4 +1,4 @@
-from apps.playlist.api.pagination import ExtendedPagination
+from apps.base.pagination import ExtendedPagination
 from apps.playlist.api.playlist_serializers import (
     PlaylistListSerializer,
     PlaylistSerializer,
@@ -104,21 +104,27 @@ class PlaylistViewSet(viewsets.GenericViewSet):
 
 class PlaylistVideoViewSet(viewsets.GenericViewSet):
     serializer_class = PlaylistVideoSerializer
+    pagination_class = ExtendedPagination
 
     def get_queryset(self, pk=None):
         if pk is None:
-            return Playlist.video.through.objects.all()
+            return Playlist.video.through.objects.filter()
         else:
             return Playlist.video.through.objects.filter(id=pk).first()
 
     def get_object(self, pk):
         return get_object_or_404(Playlist.video.through, season_id=pk)
 
-    def list(self, request):
-        video_in_playlist_serializer = self.serializer_class(
-            self.get_queryset(), many=True
-        )
-        return Response(video_in_playlist_serializer.data, status=status.HTTP_200_OK)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.serializer_class(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         video_in_playlist = self.get_object(pk)

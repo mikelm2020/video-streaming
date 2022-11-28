@@ -11,10 +11,12 @@ from apps.season.api.season_serializers import (
     SeasonCreateSerializer,
 )
 from apps.core.models import *
+from apps.base.pagination import ExtendedPagination
 
 
 class SeasonViewSet(viewsets.GenericViewSet):
     serializer_class = SeasonSerializer
+    pagination_class = ExtendedPagination
 
     def get_queryset(self, pk=None):
         if pk is None:
@@ -25,9 +27,16 @@ class SeasonViewSet(viewsets.GenericViewSet):
     def get_object(self, pk):
         return get_object_or_404(Season, pk=pk)
 
-    def list(self, request):
-        season_serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response(season_serializer.data, status=status.HTTP_200_OK)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.serializer_class(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request):
         serializer = SeasonCreateSerializer(data=request.data)

@@ -1,6 +1,6 @@
 from apps.core.models import *
 from apps.video.api.filters import VideoFilterSet
-from apps.video.api.pagination import ExtendedPagination
+from apps.base.pagination import ExtendedPagination
 from apps.video.api.video_serializers import (
     SeasonRegisterSerializer,
     VideoSerializer,
