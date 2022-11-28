@@ -1,7 +1,6 @@
-from django.db import models
-
-from apps.core.models import FilmGenre, Classification, Country, Provider
 from apps.base.models import BaseModel
+from apps.core.models import Classification, Country, FilmGenre, Provider
+from django.db import models
 
 
 class Video(BaseModel):

@@ -1,6 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-
+from django.db import models
 from simple_history.models import HistoricalRecords
 
 from .managers import UserManager

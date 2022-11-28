@@ -1,5 +1,5 @@
-from django.contrib import admin
 from apps.video.models import Video
+from django.contrib import admin
 
 
 @admin.register(Video)

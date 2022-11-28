@@ -37,10 +37,11 @@ class UserSerializer(serializers.ModelSerializer):
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("email", "name", "last_name")
+        fields = ("username", "email", "name", "last_name")
 
         def to_representation(self, instance):
             return {
+                "username": instance["username"],
                 "email": instance["email"],
                 "name": instance["name"],
                 "last_name": instance["last_name"],

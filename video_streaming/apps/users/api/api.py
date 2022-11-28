@@ -1,26 +1,36 @@
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework.decorators import action
-
-from django.shortcuts import get_object_or_404
-
+from apps.base.filters import UserFilterSet
+from apps.base.pagination import ExtendedPagination
 from apps.users.api.serializers import (
     PasswordSerializer,
-    UserSerializer,
     UserListSerializer,
+    UserSerializer,
     UserUpdateSerializer,
 )
+from django.shortcuts import get_object_or_404
+from django_filters import rest_framework
+from rest_framework import filters, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 
 class UserViewSet(viewsets.GenericViewSet):
     serializer_class = UserSerializer
     list_serializer_class = UserListSerializer
+    filter_backends = [
+        rest_framework.DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_class = UserFilterSet
+    search_fields = ("name", "last_name")
+    ordering_fields = ("email", "username")
+    pagination_class = ExtendedPagination
 
     def get_queryset(self):
         if self.queryset is None:
             self.queryset = self.serializer_class.Meta.model.objects.filter(
                 is_active=True
-            ).values("email", "name", "last_name")
+            ).values("username", "email", "name", "last_name")
             return self.queryset
 
     def get_object(self, pk):
@@ -42,10 +52,16 @@ class UserViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def list(self, request):
-        users = self.get_queryset()
-        users_serializer = self.list_serializer_class(users, many=True)
-        return Response(users_serializer.data, status=status.HTTP_200_OK)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.list_serializer_class(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.list_serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request):
         user_serializer = self.serializer_class(data=request.data)

@@ -1,15 +1,16 @@
-from django.db import models
-
 from apps.base.models import BaseModel
-from apps.users.models import User
 from apps.core.models import Provider
 from apps.season.models import Season
+from apps.users.models import User
+from django.db import models
 
 
 class Playlist(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
-    video = models.ManyToManyField(Season, related_name="videos",through="PlaylistVideo")
+    video = models.ManyToManyField(
+        Season, related_name="videos", through="PlaylistVideo"
+    )
 
     class Meta:
         verbose_name = "Lista de reproducción"
@@ -23,8 +24,6 @@ class PlaylistVideo(models.Model):
     playlist_id = models.ForeignKey(Playlist, on_delete=models.CASCADE)
     season_id = models.ForeignKey(Season, on_delete=models.CASCADE)
     viewed = models.BooleanField(verbose_name="Visto", default=False)
-    
+
     class Meta:
         db_table = "playlist_playlist_video_viewed"
-
-    

@@ -1,7 +1,6 @@
-from django_filters import rest_framework
-from rest_framework import filters
-
+from apps.users.models import User
 from apps.video.models import Video
+from django_filters import rest_framework
 
 
 class VideoFilterSet(rest_framework.FilterSet):
@@ -24,4 +23,15 @@ class VideoFilterSet(rest_framework.FilterSet):
         fields = (
             "video_type",
             "num_year",
+        )
+
+
+class UserFilterSet(rest_framework.FilterSet):
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "email",
+            "name",
+            "last_name",
         )

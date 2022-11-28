@@ -1,7 +1,7 @@
-from rest_framework import serializers
 from apps.playlist.models import Playlist, PlaylistVideo
-from apps.users.models import User
 from apps.season.api.season_serializers import SeasonSerializer
+from apps.users.models import User
+from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -27,7 +27,6 @@ class PlaylistSerializer(serializers.ModelSerializer):
 class PlaylistListSerializer(serializers.Serializer):
     user = UserSerializer()
     video = SeasonSerializer(many=True)
-    
 
 
 class PlaylistVideoSerializer(serializers.ModelSerializer):

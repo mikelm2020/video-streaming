@@ -1,17 +1,14 @@
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework.decorators import action
-
-from django.shortcuts import get_object_or_404
-
-from apps.season.models import Season
+from apps.base.pagination import ExtendedPagination
+from apps.core.models import *
 from apps.season.api.season_serializers import (
+    SeasonCreateSerializer,
     SeasonSerializer,
     SeasonUpdateSerializer,
-    SeasonCreateSerializer,
 )
-from apps.core.models import *
-from apps.base.pagination import ExtendedPagination
+from apps.season.models import Season
+from django.shortcuts import get_object_or_404
+from rest_framework import status, viewsets
+from rest_framework.response import Response
 
 
 class SeasonViewSet(viewsets.GenericViewSet):

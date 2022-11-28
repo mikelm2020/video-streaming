@@ -1,6 +1,6 @@
-from rest_framework import serializers
 from apps.season.models import Season
 from apps.video.api.video_serializers import VideoSerializer
+from rest_framework import serializers
 
 
 class SeasonSerializer(serializers.ModelSerializer):

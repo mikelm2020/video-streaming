@@ -1,8 +1,8 @@
-from rest_framework import serializers
-from apps.video.models import Video
-from apps.core.models import *
 from apps.core.api.core_serializers import *
+from apps.core.models import *
 from apps.season.models import Season
+from apps.video.models import Video
+from rest_framework import serializers
 
 
 class VideoSerializer(serializers.ModelSerializer):

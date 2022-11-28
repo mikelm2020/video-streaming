@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from apps.core.models import *
+from rest_framework import serializers
 
 
 class FilmGenreSerializer(serializers.ModelSerializer):
