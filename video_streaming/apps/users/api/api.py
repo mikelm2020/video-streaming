@@ -8,6 +8,7 @@ from apps.users.api.serializers import (
 )
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -36,8 +37,12 @@ class UserViewSet(viewsets.GenericViewSet):
     def get_object(self, pk):
         return get_object_or_404(self.serializer_class.Meta.model, pk=pk)
 
+    @extend_schema(request=PasswordSerializer, responses={200: None})
     @action(methods=["post"], detail=True)
     def set_password(self, request, pk=None):
+        """
+        Change password
+        """
         user = self.get_object(pk)
         password_serializer = PasswordSerializer(data=request.data)
         if password_serializer.is_valid():
@@ -52,7 +57,11 @@ class UserViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+    @extend_schema(request=UserListSerializer)
     def list(self, request, *args, **kwargs):
+        """
+        Get a collection of users
+        """
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
@@ -63,7 +72,11 @@ class UserViewSet(viewsets.GenericViewSet):
         serializer = self.list_serializer_class(queryset, many=True)
         return Response(serializer.data)
 
+    @extend_schema(request=UserSerializer, responses={201: None})
     def create(self, request):
+        """
+        Create an user
+        """
         user_serializer = self.serializer_class(data=request.data)
         if user_serializer.is_valid():
             user_serializer.save()
@@ -79,12 +92,20 @@ class UserViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+    @extend_schema(request=UserSerializer)
     def retrieve(self, request, pk=None):
+        """
+        Get an user
+        """
         user = self.get_object(pk)
         user_serializer = self.serializer_class(user)
         return Response(user_serializer.data)
 
+    @extend_schema(request=UserUpdateSerializer)
     def update(self, request, pk=None):
+        """
+        Update an user
+        """
         user = self.get_object(pk)
         user_serializer = UserUpdateSerializer(user, data=request.data)
         if user_serializer.is_valid():
@@ -101,7 +122,11 @@ class UserViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+    @extend_schema(request=UserSerializer)
     def destroy(self, request, pk=None):
+        """
+        Delete an user in logical mode
+        """
         user_destroy = self.serializer_class.Meta.model.objects.filter(id=pk).update(
             is_active=False
         )

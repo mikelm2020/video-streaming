@@ -62,9 +62,10 @@ LOCAL_APPS = [
 THIRD_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "simple_history",
-    "drf_yasg",
     "django_filters",
+    "drf_spectacular",
 ]
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
@@ -148,14 +149,23 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.AcceptHeaderVersioning",
-    "DEFAULT_VERSION": 1.0,
-    "ALLOWED_VERSIONS": {1.0},
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
 }
 
-SWAGGER_SETTINGS = {"DOC_EXPANSION": "none"}
+# SWAGGER_SETTINGS = {"DOC_EXPANSION": "none"}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Playlist's streaming videos API",
+    "DESCRIPTION": "Management the playlists made in local mode",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": True,
+    "COMPONENT_SPLIT_REQUEST": True,
+    # OTHER SETTINGS
+}

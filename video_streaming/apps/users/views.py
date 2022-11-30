@@ -1,13 +1,12 @@
 from apps.users.api.serializers import (
     CustomTokenObtainPairSerializer,
     CustomUserSerializer,
+    RefreshTokenSerializer,
 )
-from apps.users.models import User
 from django.contrib.auth import authenticate
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
@@ -42,13 +41,16 @@ class Login(TokenObtainPairView):
 
 
 class Logout(GenericAPIView):
+    serializer_class = RefreshTokenSerializer
+
     def post(self, request, *args, **kwargs):
-        user = User.objects.filter(id=request.data.get("user", 0))
-        if user.exists():
-            RefreshToken.for_user(user.first())
+        user = self.get_serializer(data=request.data)
+        if user.is_valid():
+            user.save()
             return Response(
-                {"message": "Sessión cerrada correctamente."}, status=status.HTTP_200_OK
+                {"message": "Session cerrada correctamente"},
+                status=status.HTTP_204_NO_CONTENT,
             )
         return Response(
-            {"error": "No existe este usuario."}, status=status.HTTP_400_BAD_REQUEST
+            {"error": "No existe este usuario!"}, status=status.HTTP_400_BAD_REQUEST
         )

@@ -1,8 +1,21 @@
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
-from rest_framework import serializers
-
 from apps.users.models import User
+from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+
+
+class RefreshTokenSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
+    def validate(self, attrs):
+        self.token = attrs["refresh"]
+        return attrs
+
+    def save(self, **kwargs):
+        try:
+            RefreshToken(self.token).blacklist()
+        except TokenError:
+            self.fail("bad_token")
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -18,7 +31,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = "__all__"
+        fields = (
+            "username",
+            "email",
+            "name",
+            "last_name",
+            "password"
+        )
 
         def create(self, validated_data):
             user = User(**validated_data)
@@ -51,7 +70,7 @@ class UserListSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("email", "name", "last_name")
+        fields = ("username", "email", "name", "last_name")
 
 
 class PasswordSerializer(serializers.Serializer):

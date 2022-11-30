@@ -9,6 +9,7 @@ from apps.video.api.video_serializers import (
 from apps.video.models import Video
 from django.db.models.query import QuerySet
 from django_filters import rest_framework
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters, status, viewsets
 from rest_framework.response import Response
 
@@ -38,12 +39,33 @@ class VideoNewViewSet(viewsets.ModelViewSet):
             queryset = queryset.all()
         return queryset
 
+    @extend_schema(request=VideoSerializer)
+    def list(self, request, *args, **kwargs):
+        """
+        Get a collection of videos
+        """
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.serializer_class(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
     def retrieve(self, request, *args, **kwargs):
+        """
+        Get a video
+        """
         video = self.get_object(*args)
         video_serializer = self.serializer_class(video)
         return Response(video_serializer.data)
 
     def create(self, request, *args, **kwargs):
+        """
+        Create a video
+        """
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -75,6 +97,9 @@ class VideoNewViewSet(viewsets.ModelViewSet):
         )
 
     def update(self, request, *args, **kwargs):
+        """
+        Update a video
+        """
         video = self.get_object(*args)
         video_serializer = self.serializer_class(video, data=request.data)
         if video_serializer.is_valid():
@@ -92,12 +117,18 @@ class VideoNewViewSet(viewsets.ModelViewSet):
         )
 
     def destroy(self, request, *args, **kwargs):
+        """
+        Delete a video in phisical mode
+        """
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @extend_schema(request=VideoStateSerializer)
     def partial_update(self, request, *args, **kwargs):
-        """Unsubscribe a video"""
+        """
+        Unsubscribe a video
+        """
         video = self.get_object()
         video_serializer = VideoStateSerializer(video, data=request.data, partial=True)
         if video_serializer.is_valid():

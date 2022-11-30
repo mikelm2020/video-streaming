@@ -7,6 +7,7 @@ from apps.season.api.season_serializers import (
 )
 from apps.season.models import Season
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
@@ -25,6 +26,9 @@ class SeasonViewSet(viewsets.GenericViewSet):
         return get_object_or_404(Season, pk=pk)
 
     def list(self, request, *args, **kwargs):
+        """
+        Get a collection of Series' seasons
+        """
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
@@ -35,7 +39,11 @@ class SeasonViewSet(viewsets.GenericViewSet):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
+    @extend_schema(request=SeasonCreateSerializer, responses={201: None})
     def create(self, request):
+        """
+        Create a Serie's season
+        """
         serializer = SeasonCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -49,11 +57,17 @@ class SeasonViewSet(viewsets.GenericViewSet):
         )
 
     def retrieve(self, request, pk=None):
+        """
+        Get a Serie's season
+        """
         season = self.get_object(pk)
         season_serializer = self.serializer_class(season)
         return Response(season_serializer.data)
 
     def destroy(self, request, pk=None):
+        """
+        Delete a Serie's season in logical mode
+        """
         season_destroy = self.serializer_class.Meta.model.objects.filter(id=pk).update(
             state=False
         )
@@ -67,8 +81,14 @@ class SeasonViewSet(viewsets.GenericViewSet):
             status=status.HTTP_404_NOT_FOUND,
         )
 
+    @extend_schema(
+        request=SeasonUpdateSerializer,
+        responses=SeasonUpdateSerializer,
+    )
     def partial_update(self, request, pk=None):
-        """Update with data of the serie's season"""
+        """
+        Update with data of the Serie's season
+        """
 
         season = self.get_object(pk)
         season_serializer = SeasonUpdateSerializer(

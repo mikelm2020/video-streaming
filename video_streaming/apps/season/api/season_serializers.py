@@ -1,6 +1,9 @@
 from apps.season.models import Season
 from apps.video.api.video_serializers import VideoSerializer
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_serializer, OpenApiExample, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
+
 
 
 class SeasonSerializer(serializers.ModelSerializer):
@@ -28,6 +31,18 @@ class SeasonSerializer(serializers.ModelSerializer):
             )
 
 
+# @extend_schema_serializer(
+#     examples=[
+#         OpenApiExample(
+#             "Valid example 1",
+#             value={
+#                 'chapters': 6,
+#                 'number_season': 2
+#             },
+#             request_only=True
+#         ),
+#     ],
+# )
 class SeasonUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Season

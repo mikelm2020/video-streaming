@@ -7,6 +7,13 @@ from apps.playlist.api.playlist_serializers import (
 )
 from apps.playlist.models import Playlist
 from django.shortcuts import get_object_or_404
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (
+    OpenApiExample,
+    OpenApiParameter,
+    extend_schema,
+    extend_schema_view,
+)
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -29,7 +36,11 @@ class PlaylistViewSet(viewsets.GenericViewSet):
     def get_object(self, pk):
         return get_object_or_404(Playlist, pk=pk)
 
+    @extend_schema(request=PlaylistListSerializer)
     def list(self, request, *args, **kwargs):
+        """
+        Get a collection of Playlists
+        """
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
@@ -48,7 +59,21 @@ class PlaylistViewSet(viewsets.GenericViewSet):
         data["user"] = user.id
         return data
 
+    @extend_schema(
+        request=PlaylistSerializer,
+        responses={201: None},
+        examples=[
+            OpenApiExample(
+                "Example 1",
+                description="Request to playlist",
+                value={"user": 0, "provider": 0, "video": [0]},
+            ),
+        ],
+    )
     def create(self, request):
+        """
+        Create a Playlist
+        """
         data = self.format_data(data=request.data)
         serializer = self.serializer_class(data=data)
 
@@ -65,29 +90,32 @@ class PlaylistViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="id", type=OpenApiTypes.INT, location=OpenApiParameter.PATH
+            ),
+        ],
+    )
     def retrieve(self, request, pk=None):
+        """
+        Get a Playlist
+        """
         playlist = self.get_object(pk)
         playlist_serializer = self.list_serializer_class(playlist)
         return Response(playlist_serializer.data)
 
-    def update(self, request, pk=None):
-        playlist = self.get_object(pk)
-        playlist_serializer = self.serializer_class(playlist, data=request.data)
-        if playlist_serializer.is_valid():
-            playlist_serializer.save()
-            return Response(
-                {"message": "Playlist actualizada correctamente"},
-                status=status.HTTP_200_OK,
-            )
-        return Response(
-            {
-                "message": "Hay errores en la actualización",
-                "error": playlist_serializer.errors,
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="id", type=OpenApiTypes.INT, location=OpenApiParameter.PATH
+            ),
+        ],
+    )
     def destroy(self, request, pk=None):
+        """
+        Delete a Playlist in logical mode
+        """
         playlist_destroy = self.serializer_class.Meta.model.objects.filter(
             id=pk
         ).update(state=False)
@@ -102,6 +130,11 @@ class PlaylistViewSet(viewsets.GenericViewSet):
         )
 
 
+@extend_schema_view(
+    list=extend_schema(operation_id="list"),
+    retrieve=extend_schema(operation_id="retrieve"),
+    partial_update=extend_schema(operation_id="partial_update"),
+)
 class PlaylistVideoViewSet(viewsets.GenericViewSet):
     serializer_class = PlaylistVideoSerializer
     pagination_class = ExtendedPagination
@@ -116,6 +149,9 @@ class PlaylistVideoViewSet(viewsets.GenericViewSet):
         return get_object_or_404(Playlist.video.through, season_id=pk)
 
     def list(self, request, *args, **kwargs):
+        """
+        Get a collection of Playlists' videos
+        """
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
@@ -127,13 +163,21 @@ class PlaylistVideoViewSet(viewsets.GenericViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
+        """
+        Get a Playlist's video
+        """
         video_in_playlist = self.get_object(pk)
         video_in_playlist_serializer = self.serializer_class(video_in_playlist)
         return Response(video_in_playlist_serializer.data)
 
+    @extend_schema(
+        request=PlaylistVideoUpdateSerializer,
+        responses=PlaylistVideoUpdateSerializer,
+    )
     def partial_update(self, request, pk=None):
-        """Update the serie how viewed"""
-
+        """
+        Update the serie how viewed
+        """
         season = self.get_object(pk)
         season_serializer = PlaylistVideoUpdateSerializer(
             season, data=request.data, partial=True
