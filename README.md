@@ -161,7 +161,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ## Roadmap
 
 - [x] Add CRUD operations
-- [ ] Terminate swagger documentation
+- [x] Terminate swagger documentation
 - [ ] Add versioning control
 
 
