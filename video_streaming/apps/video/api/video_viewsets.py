@@ -9,7 +9,7 @@ from apps.video.api.video_serializers import (
 from apps.video.models import Video
 from django.db.models.query import QuerySet
 from django_filters import rest_framework
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import filters, status, viewsets
 from rest_framework.response import Response
 
@@ -39,7 +39,21 @@ class VideoNewViewSet(viewsets.ModelViewSet):
             queryset = queryset.all()
         return queryset
 
-    @extend_schema(request=VideoSerializer)
+    @extend_schema(
+        request=VideoSerializer,
+        parameters=[
+            OpenApiParameter(
+                name="ordering",
+                location=OpenApiParameter.QUERY,
+                description="The field can you use for ordering the results is: num_year",
+            ),
+            OpenApiParameter(
+                name="search",
+                location=OpenApiParameter.QUERY,
+                description="The field can you use for search is: film_genre__film_genre and name",
+            ),
+        ],
+    )
     def list(self, request, *args, **kwargs):
         """
         Get a collection of videos

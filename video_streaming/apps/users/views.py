@@ -1,14 +1,15 @@
 from apps.users.api.serializers import (
     CustomTokenObtainPairSerializer,
     CustomUserSerializer,
-    RefreshTokenSerializer,
+    LogoutSerializer,
 )
 from django.contrib.auth import authenticate
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from drf_spectacular.utils import extend_schema
 
 class Login(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -39,18 +40,19 @@ class Login(TokenObtainPairView):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-
+@extend_schema(
+    responses={204: LogoutSerializer},
+    request=LogoutSerializer
+)
 class Logout(GenericAPIView):
-    serializer_class = RefreshTokenSerializer
+    serializer_class = LogoutSerializer
+    permission_classes = [IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
-        user = self.get_serializer(data=request.data)
-        if user.is_valid():
-            user.save()
-            return Response(
-                {"message": "Session cerrada correctamente"},
-                status=status.HTTP_204_NO_CONTENT,
-            )
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(
-            {"error": "No existe este usuario!"}, status=status.HTTP_400_BAD_REQUEST
+            {"message": "Sesión cerrada exitosamente"},
+            status=status.HTTP_204_NO_CONTENT,
         )

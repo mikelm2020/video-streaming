@@ -15,6 +15,7 @@ from drf_spectacular.utils import (
     extend_schema_view,
 )
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -39,7 +40,7 @@ class PlaylistViewSet(viewsets.GenericViewSet):
     @extend_schema(request=PlaylistListSerializer)
     def list(self, request, *args, **kwargs):
         """
-        Get a collection of Playlists
+        Get a collection of logged user's Playlists
         """
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -132,8 +133,7 @@ class PlaylistViewSet(viewsets.GenericViewSet):
 
 @extend_schema_view(
     list=extend_schema(operation_id="list"),
-    retrieve=extend_schema(operation_id="retrieve"),
-    partial_update=extend_schema(operation_id="partial_update"),
+    retrieve=extend_schema(operation_id="retrieve")
 )
 class PlaylistVideoViewSet(viewsets.GenericViewSet):
     serializer_class = PlaylistVideoSerializer
@@ -171,27 +171,50 @@ class PlaylistVideoViewSet(viewsets.GenericViewSet):
         return Response(video_in_playlist_serializer.data)
 
     @extend_schema(
-        request=PlaylistVideoUpdateSerializer,
-        responses=PlaylistVideoUpdateSerializer,
+        responses=PlaylistVideoUpdateSerializer(many=True),
+        request=PlaylistVideoUpdateSerializer(many=True),
+        parameters=[
+            OpenApiParameter(
+                name="id",
+                location=OpenApiParameter.PATH,
+                description="The season's id in the playlist found",
+            ),
+            OpenApiParameter(
+                name="searched_playlist",
+                location=OpenApiParameter.QUERY,
+                description="The playlist's id ",
+            ),
+        ],
     )
-    def partial_update(self, request, pk=None):
+    @action(methods=["get", "patch"], detail=True, pagination_class=None)
+    def mark_streaming(self, request, pk=None):
         """
-        Update the serie how viewed
+        Mark how viewed a streaming video
         """
-        season = self.get_object(pk)
-        season_serializer = PlaylistVideoUpdateSerializer(
-            season, data=request.data, partial=True
-        )
-        if season_serializer.is_valid():
-            season_serializer.save()
+        searched_playlist = request.query_params.get("searched_playlist", "")
+        playlist = Playlist.video.through.objects.filter(
+            season_id=pk, playlist_id=searched_playlist
+        ).first()
+        if playlist:
+            season_serializer = PlaylistVideoUpdateSerializer(
+                playlist, data=request.data, partial=True
+            )
+            if season_serializer.is_valid():
+                season_serializer.save()
+                return Response(
+                    {
+                        "message": "La temporada ha sido marcada como vista correctamente!"
+                    },
+                    status=status.HTTP_200_OK,
+                )
             return Response(
-                {"message": "La temporada ha sido marcada como vista correctamente!"},
-                status=status.HTTP_200_OK,
+                {
+                    "message": "Hay errores en la actualización",
+                    "error": season_serializer.errors,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(
-            {
-                "message": "Hay errores en la actualización",
-                "error": season_serializer.errors,
-            },
+            {"message": "No se ha encontrado la playlist."},
             status=status.HTTP_400_BAD_REQUEST,
         )

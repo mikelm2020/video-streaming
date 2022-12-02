@@ -45,3 +45,6 @@ class PlaylistVideoUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlaylistVideo
         fields = ("viewed",)
+
+    def to_representation(self, instance):
+        return {"viewed" : instance["viewed"]}

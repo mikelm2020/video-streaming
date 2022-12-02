@@ -4,14 +4,17 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 
-class RefreshTokenSerializer(serializers.Serializer):
+class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
+    default_error_messages = {
+        "bad_token": ("El Token ha expirado o es inválido")
+    }
 
     def validate(self, attrs):
         self.token = attrs["refresh"]
         return attrs
 
-    def save(self, **kwargs):
+    def save(self, *args, **kwargs):
         try:
             RefreshToken(self.token).blacklist()
         except TokenError:
@@ -31,13 +34,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            "username",
-            "email",
-            "name",
-            "last_name",
-            "password"
-        )
+        fields = ("username", "email", "name", "last_name", "password")
 
         def create(self, validated_data):
             user = User(**validated_data)
