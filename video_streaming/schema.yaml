@@ -1,0 +1,1745 @@
+openapi: 3.0.3
+info:
+  title: Playlist's streaming videos API
+  version: 1.0.0
+  description: Management the playlists made in local mode
+paths:
+  /api/classifications/:
+    get:
+      operationId: api_classifications_list
+      description: Get a collection of film's classifications
+      parameters:
+      - in: query
+        name: classification_is
+        schema:
+          type: string
+      - in: query
+        name: ordering
+        schema:
+          type: string
+        description: 'The field can you use for ordering the results is: age_rating'
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: 'The field can you use for search is: age_rating'
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedClassificationList'
+          description: ''
+  /api/classifications/{id}/:
+    get:
+      operationId: api_classifications_retrieve
+      description: Get a classification
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Clasificación.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classification'
+          description: ''
+  /api/countries/:
+    get:
+      operationId: api_countries_list
+      description: Get a collection of countries
+      parameters:
+      - in: query
+        name: country_is
+        schema:
+          type: string
+      - in: query
+        name: ordering
+        schema:
+          type: string
+        description: 'The fields can you use for ordering the results are: country
+          and iso_code'
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: 'The fields can you use for search is: country and iso_code'
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCountryList'
+          description: ''
+  /api/countries/{id}/:
+    get:
+      operationId: api_countries_retrieve
+      description: Get a country
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this País.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Country'
+          description: ''
+  /api/filmgenres/:
+    get:
+      operationId: api_filmgenres_list
+      description: Get a collection of film genres
+      parameters:
+      - in: query
+        name: film_genre_is
+        schema:
+          type: string
+      - in: query
+        name: ordering
+        schema:
+          type: string
+        description: 'The field can you use for ordering the results is: film_genre'
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: 'The field can you use for search is: film_genre'
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFilmGenreList'
+          description: ''
+  /api/filmgenres/{id}/:
+    get:
+      operationId: api_filmgenres_retrieve
+      description: Get a film_genre
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Genero.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilmGenre'
+          description: ''
+  /api/playlists/:
+    get:
+      operationId: api_playlists_list
+      description: Get a collection of logged user's Playlists
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPlaylistList'
+          description: ''
+    post:
+      operationId: api_playlists_create
+      description: Create a Playlist
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaylistRequest'
+            examples:
+              Example1:
+                value:
+                  user: 0
+                  provider: 0
+                  video:
+                  - 0
+                summary: Example 1
+                description: Request to playlist
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PlaylistRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlaylistRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          description: No response body
+  /api/playlists/{id}/:
+    get:
+      operationId: api_playlists_retrieve
+      description: Get a Playlist
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
+          description: ''
+    delete:
+      operationId: api_playlists_destroy
+      description: Delete a Playlist in logical mode
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/providers/:
+    get:
+      operationId: api_providers_list
+      description: Get a collection of streaming providers
+      parameters:
+      - in: query
+        name: ordering
+        schema:
+          type: string
+        description: 'The field can you use for ordering the results is: provider'
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: provider_is
+        schema:
+          type: string
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: 'The field can you use for search is: provider'
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProviderList'
+          description: ''
+  /api/providers/{id}/:
+    get:
+      operationId: api_providers_retrieve
+      description: Get a streaming provider
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Proveedor.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+          description: ''
+  /api/seasons/:
+    get:
+      operationId: api_seasons_list
+      description: Get a collection of Series' seasons
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSeasonList'
+          description: ''
+    post:
+      operationId: api_seasons_create
+      description: Create a Serie's season
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeasonCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SeasonCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SeasonCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          description: No response body
+  /api/seasons/{id}/:
+    get:
+      operationId: api_seasons_retrieve
+      description: Get a Serie's season
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Temporada.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Season'
+          description: ''
+    patch:
+      operationId: api_seasons_partial_update
+      description: Update with data of the Serie's season
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Temporada.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSeasonUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSeasonUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSeasonUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeasonUpdate'
+          description: ''
+    delete:
+      operationId: api_seasons_destroy
+      description: Delete a Serie's season in logical mode
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Temporada.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/:
+    get:
+      operationId: api_users_list
+      description: Get a collection of users
+      parameters:
+      - in: query
+        name: email
+        schema:
+          type: string
+      - in: query
+        name: last_name
+        schema:
+          type: string
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: username
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: api_users_create
+      description: Create an user
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          description: No response body
+  /api/users/{id}/:
+    get:
+      operationId: api_users_retrieve
+      description: Get an user
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Usuario.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: api_users_update
+      description: Update an user
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Usuario.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: api_users_destroy
+      description: Delete an user in logical mode
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Usuario.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/{id}/set_password/:
+    post:
+      operationId: api_users_set_password_create
+      description: Change password
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Usuario.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/videos/:
+    get:
+      operationId: api_videos_list
+      description: Get a collection of videos
+      parameters:
+      - in: query
+        name: classification_is_like
+        schema:
+          type: string
+      - in: query
+        name: country_is
+        schema:
+          type: string
+      - in: query
+        name: genre_is_like
+        schema:
+          type: string
+      - in: query
+        name: name_is_like
+        schema:
+          type: string
+      - in: query
+        name: num_year
+        schema:
+          type: integer
+      - in: query
+        name: ordering
+        schema:
+          type: string
+        description: 'The field can you use for ordering the results is: num_year'
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: provider_is
+        schema:
+          type: string
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: 'The field can you use for search is: film_genre__film_genre
+          and name'
+      - in: query
+        name: video_type
+        schema:
+          type: string
+          title: Tipo
+          enum:
+          - D
+          - M
+          - R
+          - S
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVideoList'
+          description: ''
+    post:
+      operationId: api_videos_create
+      description: Create a video
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VideoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VideoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+          description: ''
+  /api/videos-in-playlists/:
+    get:
+      operationId: list
+      description: Get a collection of Playlists' videos
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPlaylistVideoList'
+          description: ''
+  /api/videos-in-playlists/{id}/:
+    get:
+      operationId: retrieve
+      description: Get a Playlist's video
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this playlist video.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistVideo'
+          description: ''
+  /api/videos-in-playlists/{id}/mark_streaming/:
+    get:
+      operationId: api_videos_in_playlists_mark_streaming_list
+      description: Mark how viewed a streaming video
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: The season's id in the playlist found
+        required: true
+      - in: query
+        name: searched_playlist
+        schema:
+          type: string
+        description: 'The playlist''s id '
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlaylistVideoUpdate'
+          description: ''
+    patch:
+      operationId: api_videos_in_playlists_mark_streaming_partial_update
+      description: Mark how viewed a streaming video
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: The season's id in the playlist found
+        required: true
+      - in: query
+        name: searched_playlist
+        schema:
+          type: string
+        description: 'The playlist''s id '
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlaylistVideoUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlaylistVideoUpdateRequest'
+          multipart/form-data:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlaylistVideoUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlaylistVideoUpdate'
+          description: ''
+  /api/videos/{id}/:
+    get:
+      operationId: api_videos_retrieve
+      description: Get a video
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Video.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+          description: ''
+    put:
+      operationId: api_videos_update
+      description: Update a video
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Video.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VideoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VideoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+          description: ''
+    patch:
+      operationId: api_videos_partial_update
+      description: Unsubscribe a video
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Video.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVideoStateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVideoStateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVideoStateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+          description: ''
+    delete:
+      operationId: api_videos_destroy
+      description: Delete a video in phisical mode
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Video.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /login/:
+    post:
+      operationId: login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomTokenObtainPair'
+          description: ''
+  /logout/:
+    post:
+      operationId: logout_create
+      tags:
+      - logout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Logout'
+          description: ''
+  /schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+components:
+  schemas:
+    Classification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        age_rating:
+          type: string
+          title: Clasificación
+          maxLength: 5
+      required:
+      - age_rating
+      - id
+    Country:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        country:
+          type: string
+          title: País
+          maxLength: 50
+        iso_code:
+          type: string
+          title: Codigo ISO
+          maxLength: 3
+      required:
+      - country
+      - id
+      - iso_code
+    CustomTokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+      required:
+      - email
+    CustomTokenObtainPairRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+    FilmGenre:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        film_genre:
+          type: string
+          title: Genero cinematográfico
+          maxLength: 50
+      required:
+      - film_genre
+      - id
+    Logout:
+      type: object
+      properties:
+        refresh:
+          type: string
+      required:
+      - refresh
+    LogoutRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    PaginatedClassificationList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Classification'
+    PaginatedCountryList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Country'
+    PaginatedFilmGenreList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilmGenre'
+    PaginatedPlaylistList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Playlist'
+    PaginatedPlaylistVideoList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaylistVideo'
+    PaginatedProviderList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Provider'
+    PaginatedSeasonList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Season'
+    PaginatedUserList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PaginatedVideoList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Video'
+    PasswordRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          writeOnly: true
+          minLength: 8
+          maxLength: 128
+        password_confirm:
+          type: string
+          writeOnly: true
+          minLength: 8
+          maxLength: 128
+      required:
+      - password
+      - password_confirm
+    PatchedSeasonUpdateRequest:
+      type: object
+      properties:
+        chapters:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          title: Capitulos
+        number_season:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          title: Temporada
+    PatchedVideoStateRequest:
+      type: object
+      properties:
+        state:
+          type: boolean
+          title: Estado
+    Playlist:
+      type: object
+      properties:
+        user:
+          type: integer
+        provider:
+          type: integer
+        video:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+      required:
+      - provider
+      - user
+      - video
+    PlaylistRequest:
+      type: object
+      properties:
+        user:
+          type: integer
+        provider:
+          type: integer
+      required:
+      - provider
+      - user
+    PlaylistVideo:
+      type: object
+      properties:
+        playlist_id:
+          type: integer
+        season_id:
+          $ref: '#/components/schemas/Season'
+        viewed:
+          type: boolean
+          title: Visto
+      required:
+      - playlist_id
+      - season_id
+    PlaylistVideoUpdate:
+      type: object
+      properties:
+        viewed:
+          type: boolean
+          title: Visto
+    PlaylistVideoUpdateRequest:
+      type: object
+      properties:
+        viewed:
+          type: boolean
+          title: Visto
+    Provider:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        provider:
+          type: string
+          title: Proveedor
+          maxLength: 15
+      required:
+      - id
+      - provider
+    Season:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        video:
+          $ref: '#/components/schemas/Video'
+        chapters:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          title: Capitulos
+        number_season:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          title: Temporada
+      required:
+      - id
+      - video
+    SeasonCreateRequest:
+      type: object
+      properties:
+        video:
+          type: integer
+        chapters:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          title: Capitulos
+        number_season:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          title: Temporada
+      required:
+      - video
+    SeasonUpdate:
+      type: object
+      properties:
+        chapters:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          title: Capitulos
+        number_season:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          title: Temporada
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          title: Correo Electrónico
+          maxLength: 255
+        name:
+          type: string
+          nullable: true
+          title: Nombre
+          maxLength: 255
+        last_name:
+          type: string
+          nullable: true
+          title: Apellidos
+          maxLength: 255
+        password:
+          type: string
+          title: Contraseña
+          maxLength: 128
+      required:
+      - email
+      - password
+      - username
+    UserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Correo Electrónico
+          maxLength: 255
+        name:
+          type: string
+          nullable: true
+          title: Nombre
+          maxLength: 255
+        last_name:
+          type: string
+          nullable: true
+          title: Apellidos
+          maxLength: 255
+        password:
+          type: string
+          minLength: 1
+          title: Contraseña
+          maxLength: 128
+      required:
+      - email
+      - password
+      - username
+    UserUpdateRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Correo Electrónico
+          maxLength: 255
+        name:
+          type: string
+          nullable: true
+          title: Nombre
+          maxLength: 255
+        last_name:
+          type: string
+          nullable: true
+          title: Apellidos
+          maxLength: 255
+      required:
+      - email
+      - username
+    Video:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nombre
+          maxLength: 200
+        num_year:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Año
+        video_type:
+          allOf:
+          - $ref: '#/components/schemas/VideoTypeEnum'
+          title: Tipo
+        duration:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Duración
+        classification:
+          type: integer
+          title: Clasificación
+        film_genre:
+          type: array
+          items:
+            type: integer
+            title: Genero Cinematográfico
+          title: Genero Cinematográfico
+        country:
+          type: array
+          items:
+            type: integer
+            title: Pais
+          title: Pais
+        provider:
+          type: array
+          items:
+            type: integer
+            title: Proveedor
+          title: Proveedor
+      required:
+      - classification
+      - country
+      - film_genre
+      - id
+      - name
+      - num_year
+      - provider
+      - video_type
+    VideoRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nombre
+          maxLength: 200
+        num_year:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Año
+        video_type:
+          allOf:
+          - $ref: '#/components/schemas/VideoTypeEnum'
+          title: Tipo
+        duration:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Duración
+        classification:
+          type: integer
+          title: Clasificación
+        film_genre:
+          type: array
+          items:
+            type: integer
+            title: Genero Cinematográfico
+          title: Genero Cinematográfico
+        country:
+          type: array
+          items:
+            type: integer
+            title: Pais
+          title: Pais
+        provider:
+          type: array
+          items:
+            type: integer
+            title: Proveedor
+          title: Proveedor
+      required:
+      - classification
+      - country
+      - film_genre
+      - name
+      - num_year
+      - provider
+      - video_type
+    VideoTypeEnum:
+      enum:
+      - S
+      - M
+      - D
+      - R
+      type: string
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
