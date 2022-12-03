@@ -10,30 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from pathlib import Path
 from datetime import timedelta
-from django.core.exceptions import ImproperlyConfigured
-import json
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-
-with open("secret.json") as f:
-    secret = json.loads(f.read())
-
-
-def get_secret(secret_name, secrets=secret):
-    try:
-        return secrets[secret_name]
-    except:
-        msg = "The variable %s that not exists" % secret_name
-        raise ImproperlyConfigured(msg)
 
 
 # Application definition

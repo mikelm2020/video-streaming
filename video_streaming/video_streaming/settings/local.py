@@ -1,4 +1,20 @@
+import json
+
+from django.core.exceptions import ImproperlyConfigured
+
 from .common import *
+
+with open("secret.json") as f:
+    secret = json.loads(f.read())
+
+
+def get_secret(secret_name, secrets=secret):
+    try:
+        return secrets[secret_name]
+    except:
+        msg = "The variable %s that not exists" % secret_name
+        raise ImproperlyConfigured(msg)
+
 
 SECRET_KEY = get_secret("SECRET_KEY")
 
