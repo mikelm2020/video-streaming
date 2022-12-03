@@ -1,4 +1,4 @@
-from . import common
+from .common import *
 import os
 from django.conf import settings
 import dj_database_url
