@@ -42,7 +42,7 @@
     <a href="https://github.com/mikelm2020/video-streaming"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/mikelm2020/video-streaming">View Demo</a>
+    <a href="https://service-streaming.onrender.com/">View Demo</a>
     ·
     <a href="https://github.com/mikelm2020/video-streaming/issues">Report Bug</a>
     ·
@@ -83,7 +83,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](https://drive.google.com/file/d/1dybTutqaFYlw_o-Fnpcr_-v9szAG63F4/view?usp=sharing)
 
 This is a personal project because I love the series and with this I like management the playlists made in local mode
 
@@ -149,9 +149,20 @@ This project use a postgreSQL local database.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Because this project is an API can you use Postman, or any client
+In the next link can you use the API, the indications are:
+1. Login with the email: jonas@gmail.com and password: Lafrancia
+2. Copy token
+3. Click in authorized button
+4. Paste token in value field
+5. Click in Authorize button
+6. Click in close button
+7. Can you use the API
+8. Logout with refresh-token
+9. Copy refresh-token from response of login
+10. Paste refresh-token in request body of logout
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+
+_For more examples, please refer to the [Documentation](https://service-streaming.onrender.com/)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
