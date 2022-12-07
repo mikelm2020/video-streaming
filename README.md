@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/mikelm2020/video-streaming">
-    <img src="[images/logo.png](https://github.com/mikelm2020/video-streaming/blob/main/logo.png)" alt="Logo" width="80" height="80">
+    <img src="https://github.com/mikelm2020/video-streaming/blob/961be498851fc7b1e9d940550e7eb54ea3b2130f/logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">video-streaming</h3>
