@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/mikelm2020/video-streaming">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="[images/logo.png](https://github.com/mikelm2020/video-streaming/blob/main/logo.png)" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">video-streaming</h3>
@@ -212,9 +212,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Miguel Angel López Monroy - [@mklm7209282010](https://twitter.com/mklm7209282010) - mklm720928@gmail.com
+Miguel Angel López Monroy - [@miguellopezmdev](https://twitter.com/miguellopezmdev) - miguel.lopezm.dev@gmail.com
 
-Project Link: [https://github.com/mikelm2020/video-streaming](https://github.com/mikelm2020/video-streaming)
+Project Link: [https://service-streaming.onrender.com/](https://service-streaming.onrender.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
