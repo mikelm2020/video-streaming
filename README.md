@@ -83,7 +83,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://github.com/mikelm2020/video-streaming/blob/main/api_playlists.png)
+[![Product Name Screen Shot][product-screenshot]](https://github.com/mikelm2020/video-streaming/blob/82a8c694a418723faacf992c5dd76b6e328120f8/api_playlists.png)
 
 This is a personal project because I love the series and with this I like management the playlists made in local mode
 
@@ -252,8 +252,8 @@ My favorite resources used:
 [license-shield]: https://img.shields.io/github/license/mikelm2020/video-streaming.svg?style=for-the-badge
 [license-url]: https://github.com/mikelm2020/video-streaming/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/tecnottmklm
-[product-screenshot]: images/screenshot.png
+[linkedin-url]: https://linkedin.com/in/miguellopezmdev
+[product-screenshot]: https://github.com/mikelm2020/video-streaming/blob/82a8c694a418723faacf992c5dd76b6e328120f8/api_playlists.png
 [Python]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
 [Python-url]: https://www.python.org/
 [Django]: https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white
