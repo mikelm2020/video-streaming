@@ -83,7 +83,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://drive.google.com/file/d/1dybTutqaFYlw_o-Fnpcr_-v9szAG63F4/view?usp=sharing)
+[![Product Name Screen Shot][product-screenshot]](https://github.com/mikelm2020/video-streaming/blob/main/api_playlists.png)
 
 This is a personal project because I love the series and with this I like management the playlists made in local mode
 
